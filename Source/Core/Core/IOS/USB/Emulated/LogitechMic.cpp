@@ -171,9 +171,7 @@ int LogitechMic::SubmitTransfer(std::unique_ptr<CtrlMessage> cmd)
         return IPC_SUCCESS;
       }
       default:
-            // Unknown request: stall or log error here
             INFO_LOG_FMT(IOS_USB, "Unknown class-specific audio request 0x{:02X}", cmd->request);
-            // Optionally stall endpoint here
             break;
     }
   }
@@ -342,11 +340,11 @@ void LogitechMic::SetRegister(const std::unique_ptr<CtrlMessage>& cmd)
     default:
       WARN_LOG_FMT(IOS_USB,
                    "Logitech Mic unsupported SAMPLER_FREQ set (arg1={:04x}, arg2={:04x}) defaulting "
-                   "to FREQ_22KHZ",
+                   "to FREQ_48KHZ",
                    arg1, arg2);
       [[fallthrough]];
-    case FREQ_22KHZ:
-      m_sampler.freq = 22050;
+    case FREQ_48KHZ:
+      m_sampler.freq = 48000;
       break;
     }
     if (m_microphone)
@@ -435,11 +433,11 @@ void LogitechMic::GetRegister(const std::unique_ptr<CtrlMessage>& cmd) const
     default:
       WARN_LOG_FMT(IOS_USB,
                    "Logitech Mic unsupported SAMPLER_FREQ get (arg1={:04x}, arg2={:04x}) defaulting "
-                   "to FREQ_22KHZ",
+                   "to FREQ_48KHZ",
                    arg1, arg2);
       [[fallthrough]];
-    case 22050:
-      memory.Write_U16(FREQ_22KHZ, arg1);
+    case 48000:
+      memory.Write_U16(FREQ_48KHZ, arg1);
       break;
     }
     break;

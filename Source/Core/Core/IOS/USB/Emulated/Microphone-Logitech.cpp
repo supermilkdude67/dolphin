@@ -116,7 +116,7 @@ void MicrophoneLogitech::StreamStart(u32 sampling_rate)
     }
 
     cubeb_devid input_device =
-        CubebUtils::GetInputDeviceById(Config::Get(Config::MAIN_WII_SPEAK_MICROPHONE));
+        CubebUtils::GetInputDeviceById(Config::Get(Config::MAIN_LOGITECH_MIC_MICROPHONE));
     if (cubeb_stream_init(m_cubeb_ctx.get(), &m_cubeb_stream, "Dolphin Emulated Logitech Mic",
                           input_device, &params, nullptr, nullptr,
                           std::max<u32>(16, minimum_latency), CubebDataCallback, StateCallback,
@@ -199,6 +199,7 @@ long MicrophoneLogitech::DataCallback(const SampleType* input_buffer, long nfram
 
 u16 MicrophoneLogitech::ReadIntoBuffer(u8* ptr, u32 size)
 {
+  m_loudness.LogStats();
   static constexpr u32 SINGLE_READ_SIZE = BUFF_SIZE_SAMPLES * sizeof(SampleType);
 
   // Avoid buffer overflow during memcpy
@@ -247,7 +248,7 @@ void MicrophoneLogitech::UpdateLoudness(const SampleType sample)
     const FloatType amp_db = m_loudness.GetAmplitudeDb();
     m_loudness_level = static_cast<u16>((amp_db - m_loudness.DB_MIN) / UNIT);
 
-#ifdef WII_SPEAK_LOG_STATS
+#ifdef LOGITECH_MIC_LOG_STATS
     m_loudness.LogStats();
 #endif
 

@@ -25,7 +25,7 @@ struct LogitechMicState
   bool ec_reset;
   bool sp_on;
 
-  static constexpr u32 DEFAULT_SAMPLING_RATE = 22050;
+  static constexpr u32 DEFAULT_SAMPLING_RATE = 48000;
 };
 
 class LogitechMic final : public Device
@@ -61,7 +61,7 @@ private:
     FREQ_8KHZ = 0,
     FREQ_11KHZ = 1,
     FREQ_RESERVED = 2,
-    FREQ_22KHZ = 3,  // default
+    FREQ_48KHZ = 3,  // default
 
     SAMPLER_GAIN = 4,
     GAIN_00dB = 0,
